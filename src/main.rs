@@ -2,6 +2,7 @@ use anyhow;
 use std::io::{Read, Write};
 use std::process::{Command, Stdio};
 
+mod locations;
 mod ports;
 
 fn netstat_ports(
@@ -52,11 +53,15 @@ fn netstat_ports(
         }
     }
 
-    println!("{:?}", port_list);
-
     Ok(port_list)
 }
 
-fn main() {
-    netstat_ports((2999, 4999)).unwrap();
+#[tokio::main]
+pub async fn main() -> Result<(), ()> {
+    let port_list: ports::PortList = netstat_ports((2999, 4999)).unwrap();
+    for port in port_list {
+        let loc = locations::head_port_local(port).await;
+        println!("{:?}", loc);
+    }
+    Ok(())
 }

@@ -30,6 +30,18 @@ impl Port {
       status: PortStatus::Unknown,
     })
   }
+
+  pub fn to_local_socket(&self) -> SocketAddr {
+    SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), self.number)
+  }
+
+  pub fn to_local_url(&self) -> String {
+    let mut url = String::from("http://127.0.0.1:");
+    let port_str = self.number.to_string();
+    url.push_str(&port_str);
+
+    return url.clone();
+  }
 }
 
 impl std::fmt::Debug for Port {
@@ -57,7 +69,7 @@ impl fmt::Display for PortStatus {
 }
 
 pub fn probe_local_port(mut port: Port) -> Result<Port> {
-  let socket = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), port.number);
+  let socket = port.to_local_socket();
   port.status = probe_port(&socket, Duration::from_millis(2569)).unwrap_or(PortStatus::HostDown);
   Ok(port)
 }

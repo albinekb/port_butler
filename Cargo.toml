@@ -12,6 +12,9 @@ libc = "0.2.*"
 icmp = "0.3.*"
 socket2 = "0.3.*"
 anyhow = "1"
-hyper = "0.13.7"
+reqwest = "0.10.*"
+tokio = { version = "0.2", features = ["full"] }
+error-chain = "0.12.*"
+select = "0.5.*"
 
 
