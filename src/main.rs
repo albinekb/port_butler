@@ -1,7 +1,11 @@
 use std::io::{Read, Write};
 use std::process::{Command, Stdio};
 
-fn netstat_ports() {
+mod ports;
+
+fn netstat_ports(
+    range: (ports::PortNumber, ports::PortNumber),
+) -> Result<ports::PortList, anyhow::Error> {
     let mut cmd_netstat = Command::new("netstat")
         .arg("-Watnlv")
         .stdout(Stdio::piped())
@@ -27,17 +31,31 @@ fn netstat_ports() {
     let res_str = String::from_utf8(res).unwrap();
     let lines = res_str.lines();
 
+    let mut port_list: ports::PortList = vec![];
+
     for line in lines {
         let cols = line.split_whitespace();
-        println!("\n");
-        println!("Line!");
+
+        let mut i = 0;
         for col in cols {
-            println!("Col: {:?}", col);
+            if i == 3 {
+                let part = col.rsplit(".").next().unwrap_or("");
+                let port = ports::Port::from_str(part).unwrap();
+                let (lower, upper) = range;
+
+                if port.number < upper && port.number > lower {
+                    port_list.push(port);
+                }
+            }
+            i = i + 1;
         }
-        println!("\n");
     }
+
+    println!("{:?}", port_list);
+
+    Ok(port_list)
 }
 
 fn main() {
-    netstat_ports();
+    netstat_ports((2999, 4999)).unwrap();
 }
