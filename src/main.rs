@@ -28,11 +28,16 @@ fn netstat_ports() {
     let lines = res_str.lines();
 
     for line in lines {
-        println!("Test: {:?}", line);
+        let cols = line.split_whitespace();
+        println!("\n");
+        println!("Line!");
+        for col in cols {
+            println!("Col: {:?}", col);
+        }
+        println!("\n");
     }
 }
 
 fn main() {
-    println!("Hello, world!");
     netstat_ports();
 }
