@@ -42,6 +42,14 @@ impl Port {
 
     return url.clone();
   }
+
+  pub fn to_localhost_url(&self) -> String {
+    let mut url = String::from("http://localhost:");
+    let port_str = self.number.to_string();
+    url.push_str(&port_str);
+
+    return url.clone();
+  }
 }
 
 impl std::fmt::Debug for Port {

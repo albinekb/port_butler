@@ -16,5 +16,5 @@ reqwest = "0.10.*"
 tokio = { version = "0.2", features = ["full"] }
 error-chain = "0.12.*"
 select = "0.5.*"
-
+prettytable-rs = "^0.8"
 

@@ -1,4 +1,9 @@
+#[macro_use]
+extern crate prettytable;
+
 use anyhow;
+
+use prettytable::{Cell, Row, Table};
 use std::io::{Read, Write};
 use std::process::{Command, Stdio};
 
@@ -48,6 +53,8 @@ fn netstat_ports(
                 if port.number < upper && port.number > lower {
                     port_list.push(ports::probe_local_port(port).unwrap());
                 }
+            } else if i == 8 {
+                println!("{}", col);
             }
             i = i + 1;
         }
@@ -59,9 +66,19 @@ fn netstat_ports(
 #[tokio::main]
 pub async fn main() -> Result<(), ()> {
     let port_list: ports::PortList = netstat_ports((2999, 4999)).unwrap();
+
+    let mut table = Table::new();
+    table.add_row(row!["URL", "STATUS", "LOCATION"]);
+
     for port in port_list {
         let loc = locations::head_port_local(port).await;
-        println!("{:?}", loc);
+        match loc {
+            Some(l) => table.add_row(row![port.to_localhost_url(), port.status, l.title]),
+            None => table.add_row(row![port.to_localhost_url(), port.status, "no title"]),
+        };
+        // println!("{:?}", loc);
     }
+    table.printstd();
+
     Ok(())
 }
