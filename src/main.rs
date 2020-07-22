@@ -44,7 +44,7 @@ fn netstat_ports(
                 let (lower, upper) = range;
 
                 if port.number < upper && port.number > lower {
-                    port_list.push(port);
+                    port_list.push(ports::probe_local_port(port).unwrap());
                 }
             }
             i = i + 1;

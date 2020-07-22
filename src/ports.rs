@@ -1,31 +1,19 @@
 use libc;
-use std::error::Error;
 use std::fmt;
 use std::io::{ErrorKind, Result};
-use std::net::{SocketAddr, TcpStream};
-use std::num::ParseIntError;
+use std::net::{IpAddr, Ipv4Addr, SocketAddr, TcpStream};
 use std::time::Duration;
 
 pub type PortList = Vec<Port>;
-pub type PortNumber = i32;
+pub type PortNumber = u16;
 
+#[derive(Clone, Copy, PartialEq)]
 pub struct Port {
   pub number: PortNumber,
-  status: PortStatus,
+  pub status: PortStatus,
 }
 
 impl Port {
-  // This is a static method
-  // Static methods don't need to be called by an instance
-  // These methods are generally used as constructors
-  pub fn origin() -> Port {
-    Port {
-      number: 0,
-      status: PortStatus::Unknown,
-    }
-  }
-
-  // Another static method, taking two arguments:
   pub fn new(number: PortNumber) -> Port {
     Port {
       number,
@@ -34,7 +22,7 @@ impl Port {
   }
 
   pub fn from_str(input: &str) -> Option<Port> {
-    let parsed = input.parse::<i32>();
+    let parsed = input.parse::<u16>();
     let number = parsed.unwrap() as PortNumber;
     Some(Port {
       number,
@@ -65,6 +53,12 @@ impl fmt::Display for PortStatus {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     write!(f, "{:?}", self)
   }
+}
+
+pub fn probe_local_port(mut port: Port) -> Result<Port> {
+  let socket = SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), port.number);
+  port.status = probe_port(&socket, Duration::from_millis(2569)).unwrap_or(PortStatus::HostDown);
+  Ok(port)
 }
 
 pub fn probe_port(addr: &SocketAddr, timeout: Duration) -> Result<PortStatus> {
