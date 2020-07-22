@@ -14,6 +14,7 @@ pub struct Port {
 }
 
 impl Port {
+  #[allow(dead_code)]
   pub fn new(number: PortNumber) -> Port {
     Port {
       number,

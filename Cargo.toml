@@ -12,4 +12,6 @@ libc = "0.2.*"
 icmp = "0.3.*"
 socket2 = "0.3.*"
 anyhow = "1"
+hyper = "0.13.7"
+
 
