@@ -25,17 +25,21 @@ pub async fn head_port_local(port: Port) -> Option<Location> {
   if response.status().is_success() {
     let body: String = response.text().await.unwrap();
     // let is_nextjs: bool = body.contains("_next");
+    let document = Document::from(body.as_str());
+    let node = document.find(Name("title")).next();
 
-    let title: String = Document::from(body.as_str())
-      .find(Name("title"))
-      .next()
-      .unwrap()
-      .text();
-
-    Some(Location {
-      port: port,
-      title: title,
-    })
+    if node.is_some() {
+      let title: String = node.unwrap().text();
+      Some(Location {
+        port: port,
+        title: title,
+      })
+    } else {
+      Some(Location {
+        port: port,
+        title: String::from("Untiteled"),
+      })
+    }
   } else {
     println!("Fail: {}", response.status());
     None
