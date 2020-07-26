@@ -3,7 +3,7 @@ extern crate prettytable;
 
 use anyhow;
 
-use prettytable::{Cell, Row, Table};
+use prettytable::Table;
 use std::io::{Read, Write};
 use std::process::{Command, Stdio};
 
