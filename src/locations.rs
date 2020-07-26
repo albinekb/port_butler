@@ -37,7 +37,7 @@ pub async fn head_port_local(port: Port) -> Option<Location> {
     } else {
       Some(Location {
         port: port,
-        title: String::from("Untiteled"),
+        title: String::from("Untitled"),
       })
     }
   } else {
