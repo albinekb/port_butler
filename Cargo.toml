@@ -1,5 +1,5 @@
 [package]
-name = "host_butler"
+name = "port_butler"
 version = "0.1.0"
 authors = ["Albin Ekblom <albinekblom@gmail.com>"]
 edition = "2018"

@@ -403,22 +403,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "host_butler"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "error-chain",
- "icmp",
- "libc",
- "prettytable-rs",
- "regex",
- "reqwest",
- "select",
- "socket2",
- "tokio",
-]
-
-[[package]]
 name = "html5ever"
 version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -882,6 +866,22 @@ name = "pkg-config"
 version = "0.3.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d36492546b6af1463394d46f0c834346f31548646f6ba10849802c9c9a27ac33"
+
+[[package]]
+name = "port_butler"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "error-chain",
+ "icmp",
+ "libc",
+ "prettytable-rs",
+ "regex",
+ "reqwest",
+ "select",
+ "socket2",
+ "tokio",
+]
 
 [[package]]
 name = "ppv-lite86"
